@@ -1,0 +1,3 @@
+# Runtime dependencies (also declared in pyproject.toml).
+pygments>=2.20.0
+pyperclip>=1.9.0

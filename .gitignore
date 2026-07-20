@@ -1,0 +1,54 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Test / type / lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+*.pem
+credentials.json
+
+# Logs & OS
+*.log
+logs/
+.DS_Store
+Thumbs.db
+.session-logs/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Generated markdown snippets
+output/*.md
+!output/.gitkeep
+/.ruff_cache
+/.pytest_cache
+/.mypy_cache
+/docs
+/src/code_md/__pycache__
