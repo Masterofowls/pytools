@@ -82,9 +82,10 @@ code-md src\code_md\fence.py -o snippet.md
 ## Features
 
 - Interactive prompt: paste text or load `.txt`
-- Auto-detects language via heuristics + Pygments
+- Auto-detects language via filename + regex heuristics (stdlib only)
 - Dedents shared leading whitespace while keeping relative indentation
-- Save to `output/*.md`, copy to clipboard, or both
+- Save to `output/*.md`, copy to clipboard (OS tools), or both
+- Zero runtime third-party dependencies
 - Non-interactive file/stdin mode still available
 
 ## Development

@@ -1,0 +1,48 @@
+[project]
+name = "code-md"
+version = "0.1.0"
+description = "Interactive client: paste or load .txt into markdown code fences."
+readme = "README.md"
+authors = [
+    { name = "Shtarkman Daniel", email = "mrdaniilsh@proton.me" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "black>=26.5.1",
+    "mypy>=2.3.0",
+    "pytest>=9.1.1",
+    "ruff>=0.15.22",
+]
+
+[project.scripts]
+code-md = "code_md:main"
+
+[build-system]
+requires = ["setuptools>=75.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["code_md"]
+mypy_path = "src"

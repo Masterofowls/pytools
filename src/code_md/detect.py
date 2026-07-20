@@ -3,18 +3,19 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 from typing import Final
 
-from pygments.lexers import guess_lexer
-from pygments.util import ClassNotFound
-
-# Map Pygments aliases / names → common markdown fence tags.
+# Extension / alias → common markdown fence tags.
 _ALIAS_TO_FENCE: Final[dict[str, str]] = {
     "python": "python",
     "py": "python",
+    "pyw": "python",
     "python3": "python",
     "javascript": "javascript",
     "js": "javascript",
+    "mjs": "javascript",
+    "cjs": "javascript",
     "nodejs": "javascript",
     "typescript": "typescript",
     "ts": "typescript",
@@ -29,6 +30,7 @@ _ALIAS_TO_FENCE: Final[dict[str, str]] = {
     "pwsh": "powershell",
     "ps1": "powershell",
     "html": "html",
+    "htm": "html",
     "xml": "xml",
     "css": "css",
     "scss": "scss",
@@ -37,13 +39,20 @@ _ALIAS_TO_FENCE: Final[dict[str, str]] = {
     "yml": "yaml",
     "toml": "toml",
     "ini": "ini",
+    "cfg": "ini",
+    "conf": "ini",
     "sql": "sql",
     "rust": "rust",
+    "rs": "rust",
     "go": "go",
     "golang": "go",
     "java": "java",
     "c": "c",
+    "h": "c",
     "cpp": "cpp",
+    "cc": "cpp",
+    "cxx": "cpp",
+    "hpp": "cpp",
     "c++": "cpp",
     "csharp": "csharp",
     "c#": "csharp",
@@ -53,12 +62,14 @@ _ALIAS_TO_FENCE: Final[dict[str, str]] = {
     "php": "php",
     "swift": "swift",
     "kotlin": "kotlin",
+    "kt": "kotlin",
     "r": "r",
     "markdown": "markdown",
     "md": "markdown",
     "dockerfile": "dockerfile",
     "docker": "dockerfile",
     "text": "text",
+    "txt": "text",
     "plain": "text",
 }
 
@@ -87,22 +98,18 @@ _HEURISTICS: Final[list[tuple[re.Pattern[str], str]]] = [
 ]
 
 
-def _normalize_alias(alias: str) -> str:
-    key = alias.strip().lower()
-    return _ALIAS_TO_FENCE.get(key, key.replace(" ", "-"))
+_GENERIC_EXTENSIONS: Final[frozenset[str]] = frozenset({"txt", "text", "plain"})
 
 
 def detect_language(code: str, *, filename: str | None = None) -> str:
     """Detect a markdown fence language tag for *code*.
 
-    Prefers filename extension hints, then heuristics, then Pygments.
-    Falls back to ``text`` when nothing matches.
+    Prefers filename extension hints (except generic ones like ``.txt``),
+    then regex heuristics. Falls back to ``text`` when nothing matches.
     """
     if filename:
-        from pathlib import Path
-
         suffix = Path(filename).suffix.lstrip(".").lower()
-        if suffix in _ALIAS_TO_FENCE:
+        if suffix and suffix not in _GENERIC_EXTENSIONS and suffix in _ALIAS_TO_FENCE:
             return _ALIAS_TO_FENCE[suffix]
 
     stripped = code.strip()
@@ -112,16 +119,5 @@ def detect_language(code: str, *, filename: str | None = None) -> str:
     for pattern, lang in _HEURISTICS:
         if pattern.search(stripped):
             return lang
-
-    try:
-        lexer = guess_lexer(stripped)
-        aliases = getattr(lexer, "aliases", None) or []
-        if aliases:
-            return _normalize_alias(aliases[0])
-        name = getattr(lexer, "name", "") or ""
-        if name:
-            return _normalize_alias(name)
-    except ClassNotFound:
-        pass
 
     return "text"

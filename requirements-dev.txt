@@ -1,2 +1,2 @@
-# Editable install + runtime + development tools.
+# Editable install + development tools only.
 -e .[dev]

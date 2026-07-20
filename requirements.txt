@@ -1,3 +1,2 @@
-# Runtime dependencies (also declared in pyproject.toml).
-pygments>=2.20.0
-pyperclip>=1.9.0
+# No runtime third-party dependencies (stdlib only).
+# Install the package itself with: pip install -e .
